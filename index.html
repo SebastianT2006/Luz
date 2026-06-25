@@ -1,261 +1,354 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Para mi niña 💕</title>
-<style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para mi niña Luz</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box }
+        html, body { width: 100%; height: 100%; overflow: hidden; font-family: 'Georgia', serif }
 
-  body {
-    min-height: 100vh;
-    background: linear-gradient(135deg, #1a0010 0%, #2d0020 50%, #1a0010 100%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: 'Georgia', serif;
-    overflow: hidden;
-    position: relative;
-  }
+        .garden {
+            width: 100%; height: 100vh; position: relative;
+            background: linear-gradient(180deg, #06040f 0%, #0d0820 40%, #140a2e 70%, #0a0618 100%)
+        }
 
-  canvas {
-    position: fixed;
-    top: 0; left: 0;
-    pointer-events: none;
-    z-index: 0;
-  }
+        .aurora { position: absolute; top: 0; left: 0; width: 100%; height: 55%; pointer-events: none; overflow: hidden }
+        .aurora::before {
+            content: ''; position: absolute; top: -60px; left: 10%; width: 80%; height: 300px;
+            background: radial-gradient(ellipse at 50% 50%, rgba(180,80,200,.12) 0%, rgba(120,40,180,.06) 45%, transparent 70%);
+            animation: auroraPulse 8s ease-in-out infinite
+        }
+        .aurora::after {
+            content: ''; position: absolute; top: 20px; left: 25%; width: 50%; height: 200px;
+            background: radial-gradient(ellipse at 50% 50%, rgba(220,130,255,.08) 0%, transparent 65%);
+            animation: auroraPulse 11s ease-in-out infinite reverse
+        }
+        @keyframes auroraPulse {
+            0%,100% { opacity:.6; transform:scaleX(1) }
+            50% { opacity:1; transform:scaleX(1.08) }
+        }
 
-  .card {
-    position: relative;
-    z-index: 10;
-    background: rgba(255,255,255,0.05);
-    border: 1px solid rgba(255,150,180,0.3);
-    border-radius: 24px;
-    padding: 48px 40px;
-    max-width: 480px;
-    width: 90%;
-    text-align: center;
-    backdrop-filter: blur(12px);
-    box-shadow: 0 0 60px rgba(255,80,120,0.2), inset 0 0 40px rgba(255,80,120,0.05);
-  }
+        .stars { position: absolute; inset: 0; pointer-events: none }
+        .star { position: absolute; border-radius: 50%; background: #fff; animation: twinkle var(--d,3s) ease-in-out infinite }
+        .star.big { width: 3px; height: 3px; box-shadow: 0 0 4px 1px rgba(255,255,255,.5) }
+        .star.sm { width: 1.5px; height: 1.5px }
+        @keyframes twinkle {
+            0%,100% { opacity:.2; transform:scale(.8) }
+            50% { opacity:1; transform:scale(1.3) }
+        }
 
-  .heart-icon {
-    font-size: 64px;
-    display: block;
-    animation: heartbeat 1.4s ease-in-out infinite;
-    margin-bottom: 12px;
-    filter: drop-shadow(0 0 16px rgba(255,80,120,0.8));
-  }
+        .moon {
+            position: absolute; top: clamp(30px,6vh,60px); right: clamp(5%,8%,12%);
+            border-radius: 50%; width: clamp(36px,7vw,52px); height: clamp(36px,7vw,52px);
+            background: radial-gradient(circle at 38% 38%, #f0e8ff 0%, #d4b8f0 60%, #a878d8 100%);
+            box-shadow: 0 0 20px 6px rgba(200,160,255,.22), 0 0 60px 20px rgba(200,160,255,.08);
+            animation: moonGlow 6s ease-in-out infinite
+        }
+        @keyframes moonGlow {
+            0%,100% { box-shadow: 0 0 20px 6px rgba(200,160,255,.22), 0 0 60px 20px rgba(200,160,255,.08) }
+            50% { box-shadow: 0 0 28px 10px rgba(200,160,255,.32), 0 0 80px 30px rgba(200,160,255,.14) }
+        }
+        .moon-crater { position: absolute; border-radius: 50%; background: rgba(160,100,220,.3) }
 
-  @keyframes heartbeat {
-    0%, 100% { transform: scale(1); }
-    14% { transform: scale(1.18); }
-    28% { transform: scale(1); }
-    42% { transform: scale(1.12); }
-    70% { transform: scale(1); }
-  }
+        .title {
+            position: absolute; top: clamp(40px,8vh,72px); left: 0; width: 100%;
+            text-align: center; z-index: 10; animation: fadeDown .8s ease-out both; padding: 0 16px
+        }
+        @keyframes fadeDown {
+            from { opacity:0; transform:translateY(-18px) }
+            to { opacity:1; transform:translateY(0) }
+        }
+        .title h1 {
+            font-size: clamp(36px,10vw,72px); font-weight: 300;
+            letter-spacing: clamp(6px,2vw,12px); color: #e8c8ff;
+            text-shadow: 0 0 40px rgba(200,130,255,.35), 0 2px 4px rgba(0,0,0,.4)
+        }
+        .title p {
+            margin-top: 8px; font-size: clamp(11px,2.8vw,17px);
+            letter-spacing: clamp(2px,1.5vw,6px); color: #d4a8f8; opacity:.85;
+            font-style: italic; max-width: 90vw; margin-left: auto; margin-right: auto
+        }
+        .title .author {
+            font-size: clamp(10px,2vw,14px); letter-spacing: clamp(2px,1.5vw,5px);
+            color: #b888e8; opacity:.6; font-style: normal; margin-top: 6px
+        }
+        .divider {
+            margin: 14px auto 0; width: 120px; height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(200,140,255,.5), transparent)
+        }
 
-  .name-label {
-    font-size: 12px;
-    letter-spacing: 4px;
-    text-transform: uppercase;
-    color: rgba(255,150,180,0.6);
-    margin-bottom: 4px;
-    font-family: 'Helvetica Neue', sans-serif;
-  }
+        .scene {
+            position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
+            width: min(760px,100vw); height: min(560px,58vh); z-index: 5
+        }
+        @media (max-width:600px) {
+            .scene { height: 72vh }
+            .title { top: clamp(20px,4vh,40px) }
+        }
 
-  .name {
-    font-size: 26px;
-    color: #ff80a8;
-    margin-bottom: 20px;
-    font-style: italic;
-    text-shadow: 0 0 20px rgba(255,100,140,0.5);
-  }
+        .ground-glow {
+            position: absolute; bottom: 0; left: 0; width: 100%; height: 80px;
+            background: radial-gradient(ellipse at 50% 100%, rgba(160,80,220,.15) 0%, transparent 70%);
+            pointer-events: none
+        }
 
-  .message {
-    font-size: 24px;
-    color: #fff;
-    line-height: 1.6;
-    margin-bottom: 8px;
-    font-style: italic;
-    text-shadow: 0 0 20px rgba(255,100,140,0.4);
-  }
+        @keyframes float {
+            0%,100% { transform: translateY(0) }
+            50% { transform: translateY(-11px) }
+        }
+        @keyframes floatCenter {
+            0%,100% { transform: translateY(0) scale(1.12) }
+            50% { transform: translateY(-13px) scale(1.12) }
+        }
 
-  .message span {
-    color: #ff80a8;
-  }
-
-  .sub {
-    font-size: 15px;
-    color: rgba(255,200,220,0.75);
-    line-height: 1.8;
-    font-style: normal;
-    font-family: 'Helvetica Neue', sans-serif;
-    margin-bottom: 24px;
-  }
-
-  .divider {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin: 20px 0;
-  }
-
-  .divider-line {
-    flex: 1;
-    height: 1px;
-    background: linear-gradient(to right, transparent, rgba(255,120,160,0.5), transparent);
-  }
-
-  .divider-dot {
-    color: rgba(255,120,160,0.8);
-    font-size: 16px;
-  }
-
-  .btn {
-    background: linear-gradient(135deg, #c0325a, #e8507a);
-    border: none;
-    border-radius: 50px;
-    padding: 14px 36px;
-    color: white;
-    font-size: 15px;
-    cursor: pointer;
-    font-family: 'Helvetica Neue', sans-serif;
-    letter-spacing: 0.5px;
-    box-shadow: 0 4px 24px rgba(200,50,90,0.5);
-    transition: transform 0.15s, box-shadow 0.15s;
-  }
-
-  .btn:hover {
-    transform: scale(1.04);
-    box-shadow: 0 6px 32px rgba(200,50,90,0.7);
-  }
-
-  .btn:active { transform: scale(0.98); }
-
-  .footer-note {
-    margin-top: 20px;
-    font-size: 12px;
-    color: rgba(255,180,200,0.4);
-    font-family: 'Helvetica Neue', sans-serif;
-  }
-
-  .messages-list { display: none; }
-  .messages-list.visible { display: block; }
-
-  .msg-item {
-    font-size: 14px;
-    color: rgba(255,210,225,0.9);
-    padding: 10px 0;
-    border-bottom: 1px solid rgba(255,120,160,0.15);
-    font-family: 'Helvetica Neue', sans-serif;
-    line-height: 1.6;
-    animation: fadeIn 0.4s ease;
-  }
-
-  .msg-item:last-child { border-bottom: none; }
-
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(6px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-</style>
+        @media (max-width:480px) {
+            .title { top: clamp(28px,6vh,50px) }
+            .divider { width: 80px; margin-top: 10px }
+            .scene { height: min(480px,55vh) }
+        }
+        @media (max-height:500px) and (orientation:landscape) {
+            .title { top: 10px }
+            .title h1 { font-size: clamp(22px,6vw,40px) }
+            .title p { margin-top: 4px; font-size: clamp(10px,2vw,13px) }
+            .divider { margin-top: 6px }
+            .scene { height: 75vh }
+            .moon { top: 8px; width: 28px; height: 28px }
+        }
+    </style>
 </head>
 <body>
-<canvas id="c"></canvas>
+<div class="garden">
+    <div class="aurora"></div>
 
-<div class="card">
-  <span class="heart-icon">❤️</span>
-  <p class="name-label">Para</p>
-  <p class="name">Luz Dahiana — mi niña</p>
+    <div class="moon">
+        <div class="moon-crater" style="width:9px;height:9px;top:14px;left:28px"></div>
+        <div class="moon-crater" style="width:6px;height:6px;top:30px;left:16px"></div>
+        <div class="moon-crater" style="width:4px;height:4px;top:22px;left:22px"></div>
+    </div>
 
-  <p class="message">
-    Te quiero <span>muchísimo</span>
-  </p>
+    <div class="stars" id="stars"></div>
 
-  <div class="divider">
-    <div class="divider-line"></div>
-    <span class="divider-dot">✦</span>
-    <div class="divider-line"></div>
-  </div>
+    <div class="title">
+        <h1>Luz</h1>
+        <p>"Eres la razón por la que creo que las cosas<br>más bonitas también pueden ser reales."</p>
+        <div class="divider"></div>
+    </div>
 
-  <p class="sub">
-    Te quiero mucho mi niña,<br>
-    voy a estar contigo siempre.
-  </p>
+    <div class="scene">
+        <div class="ground-glow"></div>
 
-  <div class="messages-list" id="extras">
-    <div class="msg-item">🌸 Cada momento a tu lado vale todo para mí.</div>
-    <div class="msg-item">💌 Te quiero hoy, mañana y siempre, Luz.</div>
-    <div class="msg-item">🌹 Eres mi todo, y nunca lo olvides.</div>
-  </div>
+        <svg style="position:absolute;bottom:0;left:50%;transform:translateX(-50%);overflow:visible;width:min(560px,100vw);height:auto"
+            width="560" height="540" viewBox="0 0 560 540" preserveAspectRatio="xMidYMax meet">
+            <defs>
+                <linearGradient id="potGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="#1a0a2e"/>
+                    <stop offset="40%" stop-color="#2d1050"/>
+                    <stop offset="100%" stop-color="#120820"/>
+                </linearGradient>
+                <linearGradient id="potRimGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="#4a2870"/>
+                    <stop offset="50%" stop-color="#6a3a98"/>
+                    <stop offset="100%" stop-color="#3a1e58"/>
+                </linearGradient>
+                <linearGradient id="stemGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="#1a3a10"/>
+                    <stop offset="50%" stop-color="#2e5c1a"/>
+                    <stop offset="100%" stop-color="#1a3a10"/>
+                </linearGradient>
+                <linearGradient id="soilGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stop-color="#18083a"/>
+                    <stop offset="100%" stop-color="#0c0420"/>
+                </linearGradient>
 
-  <button class="btn" id="btnMore" onclick="showMore()">Ver más mensajes 💕</button>
+                <!-- Tulipán morado/lila - pétalo -->
+                <radialGradient id="tulipPurple" cx="50%" cy="20%" r="80%">
+                    <stop offset="0%" stop-color="#e8b8ff"/>
+                    <stop offset="50%" stop-color="#b060e8"/>
+                    <stop offset="100%" stop-color="#7020c0"/>
+                </radialGradient>
+                <!-- Tulipán rosa -->
+                <radialGradient id="tulipPink" cx="50%" cy="20%" r="80%">
+                    <stop offset="0%" stop-color="#ffb8e8"/>
+                    <stop offset="50%" stop-color="#e860b0"/>
+                    <stop offset="100%" stop-color="#c02080"/>
+                </radialGradient>
+                <!-- Tulipán lila claro -->
+                <radialGradient id="tulipLavender" cx="50%" cy="20%" r="80%">
+                    <stop offset="0%" stop-color="#f0d8ff"/>
+                    <stop offset="50%" stop-color="#c890f8"/>
+                    <stop offset="100%" stop-color="#9050d0"/>
+                </radialGradient>
 
-  <p class="footer-note">Hecho con todo el amor del mundo para mi niña 🌹</p>
+                <radialGradient id="glowPurple" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stop-color="rgba(180,100,255,0.18)"/>
+                    <stop offset="100%" stop-color="rgba(180,100,255,0)"/>
+                </radialGradient>
+
+                <!-- Interior del tulipán -->
+                <radialGradient id="tulipInner" cx="50%" cy="80%" r="60%">
+                    <stop offset="0%" stop-color="rgba(40,0,80,0.6)"/>
+                    <stop offset="100%" stop-color="rgba(40,0,80,0)"/>
+                </radialGradient>
+            </defs>
+
+            <!-- Maceta -->
+            <polygon points="210,410 350,410 330,500 230,500" fill="url(#potGrad)" stroke="#4a2870" stroke-width="1.5"/>
+            <rect x="200" y="402" width="160" height="14" rx="3" fill="url(#potRimGrad)"/>
+            <ellipse cx="280" cy="407" rx="72" ry="9" fill="url(#soilGrad)" stroke="#2d1050" stroke-width="1"/>
+
+            <!-- Tallos principales -->
+            <path d="M280,430 C278,380 279,350 280,310 C281,270 280,250 280,205" stroke="url(#stemGrad)" stroke-width="6" fill="none" stroke-linecap="round"/>
+            <path d="M275,425 C265,375 252,345 238,308 C226,275 218,255 205,218" stroke="url(#stemGrad)" stroke-width="5" fill="none" stroke-linecap="round"/>
+            <path d="M285,425 C295,375 308,345 322,308 C334,275 342,255 355,218" stroke="url(#stemGrad)" stroke-width="5" fill="none" stroke-linecap="round"/>
+            <path d="M277,428 C268,378 255,342 243,215" stroke="url(#stemGrad)" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+            <path d="M283,428 C292,378 305,342 317,215" stroke="url(#stemGrad)" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+
+            <!-- Hojas -->
+            <path d="M263,295 C245,282 236,265 248,250 C258,262 263,278 263,295Z" fill="#2a4a14" stroke="#3a6020" stroke-width="1"/>
+            <path d="M252,338 C232,326 224,308 237,292 C248,304 254,320 252,338Z" fill="#223c10" stroke="#3a6020" stroke-width="1"/>
+            <path d="M297,295 C315,282 324,265 312,250 C302,262 297,278 297,295Z" fill="#2a4a14" stroke="#3a6020" stroke-width="1"/>
+            <path d="M308,338 C328,326 336,308 323,292 C312,304 306,320 308,338Z" fill="#223c10" stroke="#3a6020" stroke-width="1"/>
+
+            <!-- Conectores tallos laterales -->
+            <line x1="200" y1="228" x2="252" y2="428" stroke="url(#stemGrad)" stroke-width="3" stroke-linecap="round"/>
+            <line x1="360" y1="228" x2="308" y2="428" stroke="url(#stemGrad)" stroke-width="3" stroke-linecap="round"/>
+
+            <!-- Maceta al frente (overlay) -->
+            <polygon points="210,410 350,410 330,500 230,500" fill="url(#potGrad)" stroke="#4a2870" stroke-width="1.5"/>
+            <rect x="200" y="402" width="160" height="14" rx="3" fill="url(#potRimGrad)"/>
+
+            <!-- Glows -->
+            <ellipse cx="205" cy="220" rx="80" ry="80" fill="url(#glowPurple)"/>
+            <ellipse cx="280" cy="195" rx="95" ry="95" fill="url(#glowPurple)"/>
+            <ellipse cx="355" cy="220" rx="80" ry="80" fill="url(#glowPurple)"/>
+
+            <!-- TULIPÁN IZQUIERDO (morado) -->
+            <g style="animation:float 4s ease-in-out infinite">
+                <g transform="translate(205,222)">
+                    <!-- pétalos traseros -->
+                    <path d="M-14,-10 C-20,-38 -14,-62 0,-68 C14,-62 20,-38 14,-10 Z" fill="url(#tulipPurple)" opacity="0.75"/>
+                    <path d="M14,-10 C28,-30 38,-52 28,-66 C16,-60 8,-38 14,-10 Z" fill="url(#tulipPurple)" opacity="0.75"/>
+                    <path d="M-14,-10 C-28,-30 -38,-52 -28,-66 C-16,-60 -8,-38 -14,-10 Z" fill="url(#tulipPurple)" opacity="0.75"/>
+                    <!-- pétalos frontales -->
+                    <path d="M-8,0 C-18,-28 -16,-56 0,-64 C16,-56 18,-28 8,0 Z" fill="url(#tulipPurple)"/>
+                    <path d="M8,0 C22,-20 30,-48 20,-62 C10,-56 4,-28 8,0 Z" fill="url(#tulipPurple)"/>
+                    <path d="M-8,0 C-22,-20 -30,-48 -20,-62 C-10,-56 -4,-28 -8,0 Z" fill="url(#tulipPurple)"/>
+                    <!-- sombra interior -->
+                    <ellipse cx="0" cy="-20" rx="12" ry="20" fill="url(#tulipInner)" opacity="0.5"/>
+                </g>
+            </g>
+
+            <!-- TULIPÁN CENTRAL (lila, más grande) -->
+            <g style="animation:floatCenter 4.5s ease-in-out infinite">
+                <g transform="translate(280,195) scale(1.15)">
+                    <path d="M-16,-12 C-24,-44 -16,-72 0,-80 C16,-72 24,-44 16,-12 Z" fill="url(#tulipLavender)" opacity="0.75"/>
+                    <path d="M16,-12 C32,-36 44,-62 32,-78 C18,-70 10,-44 16,-12 Z" fill="url(#tulipLavender)" opacity="0.75"/>
+                    <path d="M-16,-12 C-32,-36 -44,-62 -32,-78 C-18,-70 -10,-44 -16,-12 Z" fill="url(#tulipLavender)" opacity="0.75"/>
+                    <path d="M-9,0 C-22,-32 -18,-66 0,-76 C18,-66 22,-32 9,0 Z" fill="url(#tulipLavender)"/>
+                    <path d="M9,0 C26,-24 36,-56 24,-74 C12,-66 5,-34 9,0 Z" fill="url(#tulipLavender)"/>
+                    <path d="M-9,0 C-26,-24 -36,-56 -24,-74 C-12,-66 -5,-34 -9,0 Z" fill="url(#tulipLavender)"/>
+                    <ellipse cx="0" cy="-24" rx="14" ry="24" fill="url(#tulipInner)" opacity="0.45"/>
+                </g>
+            </g>
+
+            <!-- TULIPÁN DERECHO (rosa) -->
+            <g style="animation:float 3.8s ease-in-out infinite .4s">
+                <g transform="translate(355,222)">
+                    <path d="M-14,-10 C-20,-38 -14,-62 0,-68 C14,-62 20,-38 14,-10 Z" fill="url(#tulipPink)" opacity="0.75"/>
+                    <path d="M14,-10 C28,-30 38,-52 28,-66 C16,-60 8,-38 14,-10 Z" fill="url(#tulipPink)" opacity="0.75"/>
+                    <path d="M-14,-10 C-28,-30 -38,-52 -28,-66 C-16,-60 -8,-38 -14,-10 Z" fill="url(#tulipPink)" opacity="0.75"/>
+                    <path d="M-8,0 C-18,-28 -16,-56 0,-64 C16,-56 18,-28 8,0 Z" fill="url(#tulipPink)"/>
+                    <path d="M8,0 C22,-20 30,-48 20,-62 C10,-56 4,-28 8,0 Z" fill="url(#tulipPink)"/>
+                    <path d="M-8,0 C-22,-20 -30,-48 -20,-62 C-10,-56 -4,-28 -8,0 Z" fill="url(#tulipPink)"/>
+                    <ellipse cx="0" cy="-20" rx="12" ry="20" fill="url(#tulipInner)" opacity="0.5"/>
+                </g>
+            </g>
+
+            <!-- TULIPÁN SECUNDARIO IZQUIERDO (morado pequeño) -->
+            <g style="animation:float 4.2s ease-in-out infinite .2s">
+                <g transform="translate(243,215) scale(0.82)">
+                    <path d="M-12,-8 C-18,-32 -12,-54 0,-60 C12,-54 18,-32 12,-8 Z" fill="url(#tulipPurple)" opacity="0.7"/>
+                    <path d="M12,-8 C24,-26 32,-46 22,-58 C12,-52 6,-30 12,-8 Z" fill="url(#tulipPurple)" opacity="0.7"/>
+                    <path d="M-12,-8 C-24,-26 -32,-46 -22,-58 C-12,-52 -6,-30 -12,-8 Z" fill="url(#tulipPurple)" opacity="0.7"/>
+                    <path d="M-7,0 C-16,-24 -14,-50 0,-58 C14,-50 16,-24 7,0 Z" fill="url(#tulipPurple)"/>
+                    <path d="M7,0 C18,-18 26,-42 16,-56 C8,-50 2,-24 7,0 Z" fill="url(#tulipPurple)"/>
+                    <path d="M-7,0 C-18,-18 -26,-42 -16,-56 C-8,-50 -2,-24 -7,0 Z" fill="url(#tulipPurple)"/>
+                </g>
+            </g>
+
+            <!-- TULIPÁN SECUNDARIO DERECHO (rosa pequeño) -->
+            <g style="animation:float 3.5s ease-in-out infinite .6s">
+                <g transform="translate(317,215) scale(0.78)">
+                    <path d="M-12,-8 C-18,-32 -12,-54 0,-60 C12,-54 18,-32 12,-8 Z" fill="url(#tulipPink)" opacity="0.7"/>
+                    <path d="M12,-8 C24,-26 32,-46 22,-58 C12,-52 6,-30 12,-8 Z" fill="url(#tulipPink)" opacity="0.7"/>
+                    <path d="M-12,-8 C-24,-26 -32,-46 -22,-58 C-12,-52 -6,-30 -12,-8 Z" fill="url(#tulipPink)" opacity="0.7"/>
+                    <path d="M-7,0 C-16,-24 -14,-50 0,-58 C14,-50 16,-24 7,0 Z" fill="url(#tulipPink)"/>
+                    <path d="M7,0 C18,-18 26,-42 16,-56 C8,-50 2,-24 7,0 Z" fill="url(#tulipPink)"/>
+                    <path d="M-7,0 C-18,-18 -26,-42 -16,-56 C-8,-50 -2,-24 -7,0 Z" fill="url(#tulipPink)"/>
+                </g>
+            </g>
+
+        </svg>
+    </div>
+
+    <canvas id="particles" style="position:absolute;inset:0;pointer-events:none;z-index:2"></canvas>
 </div>
 
 <script>
-const canvas = document.getElementById('c');
-const ctx = canvas.getContext('2d');
-
-function resize() {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-}
-resize();
-window.addEventListener('resize', resize);
-
-const hearts = [];
-for (let i = 0; i < 35; i++) {
-  hearts.push({
-    x: Math.random() * window.innerWidth,
-    y: Math.random() * window.innerHeight + window.innerHeight,
-    size: Math.random() * 16 + 8,
-    speed: Math.random() * 0.6 + 0.3,
-    opacity: Math.random() * 0.5 + 0.1,
-    drift: (Math.random() - 0.5) * 0.4
-  });
-}
-
-function drawHeart(x, y, size, opacity) {
-  ctx.save();
-  ctx.globalAlpha = opacity;
-  ctx.fillStyle = '#ff6090';
-  ctx.beginPath();
-  ctx.moveTo(x, y + size * 0.25);
-  ctx.bezierCurveTo(x, y, x - size, y, x - size, y + size * 0.35);
-  ctx.bezierCurveTo(x - size, y + size * 0.7, x, y + size * 0.85, x, y + size);
-  ctx.bezierCurveTo(x, y + size * 0.85, x + size, y + size * 0.7, x + size, y + size * 0.35);
-  ctx.bezierCurveTo(x + size, y, x, y, x, y + size * 0.25);
-  ctx.fill();
-  ctx.restore();
-}
-
-function animate() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  for (const h of hearts) {
-    h.y -= h.speed;
-    h.x += h.drift;
-    if (h.y < -40) {
-      h.y = canvas.height + 20;
-      h.x = Math.random() * canvas.width;
+    const svg = document.querySelector('.scene svg');
+    function updateViewBox() {
+        if (window.innerWidth <= 600) {
+            svg.setAttribute('viewBox', '60 140 440 400');
+        } else {
+            svg.setAttribute('viewBox', '0 0 560 540');
+        }
     }
-    drawHeart(h.x, h.y, h.size, h.opacity);
-  }
-  requestAnimationFrame(animate);
-}
-animate();
+    updateViewBox();
+    window.addEventListener('resize', updateViewBox);
 
-let shown = false;
-function showMore() {
-  if (!shown) {
-    document.getElementById('extras').classList.add('visible');
-    document.getElementById('btnMore').textContent = '💗 Te amo, mi niña';
-    document.getElementById('btnMore').style.background = 'linear-gradient(135deg, #9b1d4a, #c4335f)';
-    shown = true;
-  }
-}
+    const starsEl = document.getElementById('stars');
+    const starData = [
+        {t:6,l:8,s:'big',d:3.2},{t:14,l:18,s:'sm',d:2.1},{t:5,l:28,s:'big',d:4},{t:22,l:35,s:'sm',d:1.8},
+        {t:9,l:45,s:'sm',d:2.8},{t:17,l:55,s:'big',d:3.5},{t:7,l:65,s:'sm',d:2},{t:12,l:73,s:'big',d:4.2},
+        {t:25,l:80,s:'sm',d:1.5},{t:19,l:88,s:'big',d:3},{t:3,l:92,s:'sm',d:2.6},{t:30,l:5,s:'sm',d:3.8},
+        {t:38,l:22,s:'big',d:2.4},{t:44,l:42,s:'sm',d:4.5},{t:35,l:60,s:'sm',d:1.9},{t:42,l:78,s:'big',d:3.1},
+        {t:50,l:90,s:'sm',d:2.2},{t:28,l:50,s:'big',d:3.7},{t:10,l:40,s:'sm',d:1.6},{t:16,l:58,s:'big',d:2.9}
+    ];
+    starData.forEach(s => {
+        const el = document.createElement('span');
+        el.className = 'star ' + s.s;
+        el.style.cssText = `top:${s.t}%;left:${s.l}%;--d:${s.d}s;animation-delay:${(Math.random()*3).toFixed(1)}s`;
+        starsEl.appendChild(el);
+    });
+
+    const canvas = document.getElementById('particles');
+    const ctx = canvas.getContext('2d');
+    let W, H, particles = [];
+    function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight }
+    resize();
+    window.addEventListener('resize', resize);
+    for (let i = 0; i < 30; i++) {
+        particles.push({
+            x: Math.random(), y: .5 + Math.random() * .5,
+            vx: (Math.random() - .5) * .0003, vy: -Math.random() * .0004 - .0001,
+            r: Math.random() * 1.8 + .4, a: Math.random() * .6 + .1,
+            hue: Math.random() * 60 + 260
+        });
+    }
+    function animParticles() {
+        ctx.clearRect(0, 0, W, H);
+        particles.forEach(p => {
+            p.x += p.vx; p.y += p.vy; p.a += .002;
+            if (p.y < 0) { p.y = .85 + Math.random() * .15; p.x = .3 + Math.random() * .4 }
+            ctx.beginPath();
+            ctx.arc(p.x * W, p.y * H, p.r, 0, Math.PI * 2);
+            ctx.fillStyle = `hsla(${p.hue},90%,78%,${Math.abs(Math.sin(p.a)) * .55})`;
+            ctx.fill();
+        });
+        requestAnimationFrame(animParticles);
+    }
+    animParticles();
 </script>
 </body>
 </html>
