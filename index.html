@@ -10,10 +10,19 @@
 
         .garden {
             width: 100%; height: 100vh; position: relative;
+            transition: background 1.2s ease;
+        }
+        .garden.night {
             background: linear-gradient(180deg, #06040f 0%, #0d0820 40%, #140a2e 70%, #0a0618 100%)
         }
+        .garden.day {
+            background: linear-gradient(180deg, #87ceeb 0%, #b8e4f7 35%, #d4f0c0 65%, #8fd460 100%)
+        }
 
-        .aurora { position: absolute; top: 0; left: 0; width: 100%; height: 55%; pointer-events: none; overflow: hidden }
+        /* AURORA solo noche */
+        .aurora { position: absolute; top: 0; left: 0; width: 100%; height: 55%; pointer-events: none; overflow: hidden; transition: opacity 1s }
+        .day .aurora { opacity: 0 }
+        .night .aurora { opacity: 1 }
         .aurora::before {
             content: ''; position: absolute; top: -60px; left: 10%; width: 80%; height: 300px;
             background: radial-gradient(ellipse at 50% 50%, rgba(180,80,200,.12) 0%, rgba(120,40,180,.06) 45%, transparent 70%);
@@ -29,55 +38,142 @@
             50% { opacity:1; transform:scaleX(1.08) }
         }
 
-        .stars { position: absolute; inset: 0; pointer-events: none }
+        /* NUBES solo día */
+        .clouds { position: absolute; top: 0; left: 0; width: 100%; height: 40%; pointer-events: none; transition: opacity 1s; overflow: hidden }
+        .night .clouds { opacity: 0 }
+        .day .clouds { opacity: 1 }
+        .cloud {
+            position: absolute; background: white; border-radius: 50px; opacity: 0.85;
+        }
+        .cloud::before, .cloud::after {
+            content: ''; position: absolute; background: white; border-radius: 50%;
+        }
+        .cloud1 { width: 120px; height: 30px; top: 12%; left: 8%; animation: cloudMove 22s linear infinite }
+        .cloud1::before { width: 60px; height: 50px; top: -28px; left: 18px }
+        .cloud1::after  { width: 40px; height: 38px; top: -20px; left: 55px }
+        .cloud2 { width: 90px; height: 24px; top: 20%; left: 60%; animation: cloudMove 30s linear infinite 6s }
+        .cloud2::before { width: 46px; height: 40px; top: -22px; left: 12px }
+        .cloud2::after  { width: 34px; height: 30px; top: -16px; left: 42px }
+        .cloud3 { width: 70px; height: 20px; top: 8%; left: 40%; animation: cloudMove 26s linear infinite 12s }
+        .cloud3::before { width: 36px; height: 32px; top: -18px; left: 10px }
+        .cloud3::after  { width: 28px; height: 24px; top: -12px; left: 34px }
+        @keyframes cloudMove {
+            from { transform: translateX(0) }
+            to   { transform: translateX(110vw) }
+        }
+
+        /* ESTRELLAS solo noche */
+        .stars { position: absolute; inset: 0; pointer-events: none; transition: opacity 1s }
+        .day .stars { opacity: 0 }
+        .night .stars { opacity: 1 }
         .star { position: absolute; border-radius: 50%; background: #fff; animation: twinkle var(--d,3s) ease-in-out infinite }
         .star.big { width: 3px; height: 3px; box-shadow: 0 0 4px 1px rgba(255,255,255,.5) }
-        .star.sm { width: 1.5px; height: 1.5px }
+        .star.sm  { width: 1.5px; height: 1.5px }
         @keyframes twinkle {
             0%,100% { opacity:.2; transform:scale(.8) }
             50% { opacity:1; transform:scale(1.3) }
         }
 
-        .moon {
+        /* SUELO campo día */
+        .field {
+            position: absolute; bottom: 0; left: 0; width: 100%; height: 32%; pointer-events: none;
+            transition: opacity 1s;
+            background: linear-gradient(180deg, #7ec850 0%, #5aad30 60%, #3d8020 100%);
+            border-radius: 60% 60% 0 0 / 20% 20% 0 0;
+        }
+        .night .field { opacity: 0 }
+        .day .field { opacity: 1 }
+
+        /* LUNA / SOL */
+        .moon-sun {
             position: absolute; top: clamp(30px,6vh,60px); right: clamp(5%,8%,12%);
-            border-radius: 50%; width: clamp(36px,7vw,52px); height: clamp(36px,7vw,52px);
+            border-radius: 50%; width: clamp(44px,8vw,60px); height: clamp(44px,8vw,60px);
+            cursor: pointer; transition: background 1.2s, box-shadow 1.2s, transform .2s;
+            z-index: 20;
+        }
+        .moon-sun:hover { transform: scale(1.12) }
+        .night .moon-sun {
             background: radial-gradient(circle at 38% 38%, #f0e8ff 0%, #d4b8f0 60%, #a878d8 100%);
             box-shadow: 0 0 20px 6px rgba(200,160,255,.22), 0 0 60px 20px rgba(200,160,255,.08);
             animation: moonGlow 6s ease-in-out infinite
         }
+        .day .moon-sun {
+            background: radial-gradient(circle at 42% 38%, #fffbe0 0%, #ffe066 50%, #ffa500 100%);
+            box-shadow: 0 0 30px 12px rgba(255,220,60,.45), 0 0 80px 30px rgba(255,180,0,.2);
+            animation: sunGlow 4s ease-in-out infinite
+        }
         @keyframes moonGlow {
             0%,100% { box-shadow: 0 0 20px 6px rgba(200,160,255,.22), 0 0 60px 20px rgba(200,160,255,.08) }
-            50% { box-shadow: 0 0 28px 10px rgba(200,160,255,.32), 0 0 80px 30px rgba(200,160,255,.14) }
+            50%      { box-shadow: 0 0 28px 10px rgba(200,160,255,.32), 0 0 80px 30px rgba(200,160,255,.14) }
         }
-        .moon-crater { position: absolute; border-radius: 50%; background: rgba(160,100,220,.3) }
+        @keyframes sunGlow {
+            0%,100% { box-shadow: 0 0 30px 12px rgba(255,220,60,.45), 0 0 80px 30px rgba(255,180,0,.2) }
+            50%      { box-shadow: 0 0 44px 20px rgba(255,220,60,.65), 0 0 110px 50px rgba(255,180,0,.32) }
+        }
+        .moon-crater { position: absolute; border-radius: 50%; background: rgba(160,100,220,.3); transition: opacity 1s }
+        .day .moon-crater { opacity: 0 }
 
+        /* Rayos del sol */
+        .sun-rays {
+            position: absolute; inset: -18px; pointer-events: none;
+            transition: opacity 1s; opacity: 0;
+        }
+        .day .sun-rays { opacity: 1 }
+        .sun-ray {
+            position: absolute; top: 50%; left: 50%;
+            width: 14px; height: 3px; background: rgba(255,210,40,.7);
+            border-radius: 2px; transform-origin: left center;
+            margin-top: -1.5px;
+        }
+
+        /* TÍTULO */
         .title {
             position: absolute; top: clamp(40px,8vh,72px); left: 0; width: 100%;
             text-align: center; z-index: 10; animation: fadeDown .8s ease-out both; padding: 0 16px
         }
         @keyframes fadeDown {
             from { opacity:0; transform:translateY(-18px) }
-            to { opacity:1; transform:translateY(0) }
+            to   { opacity:1; transform:translateY(0) }
         }
         .title h1 {
             font-size: clamp(36px,10vw,72px); font-weight: 300;
-            letter-spacing: clamp(6px,2vw,12px); color: #e8c8ff;
+            letter-spacing: clamp(6px,2vw,12px);
+            transition: color 1.2s, text-shadow 1.2s;
+        }
+        .night .title h1 {
+            color: #e8c8ff;
             text-shadow: 0 0 40px rgba(200,130,255,.35), 0 2px 4px rgba(0,0,0,.4)
         }
-        .title p {
+        .day .title h1 {
+            color: #fff;
+            text-shadow: 0 2px 16px rgba(80,160,40,.5), 0 2px 4px rgba(0,0,0,.15)
+        }
+        .title .frase {
             margin-top: 8px; font-size: clamp(11px,2.8vw,17px);
-            letter-spacing: clamp(2px,1.5vw,6px); color: #d4a8f8; opacity:.85;
-            font-style: italic; max-width: 90vw; margin-left: auto; margin-right: auto
+            letter-spacing: clamp(2px,1.5vw,6px); opacity:.9;
+            font-style: italic; max-width: 90vw; margin-left: auto; margin-right: auto;
+            transition: color 1.2s, opacity .5s;
         }
-        .title .author {
-            font-size: clamp(10px,2vw,14px); letter-spacing: clamp(2px,1.5vw,5px);
-            color: #b888e8; opacity:.6; font-style: normal; margin-top: 6px
-        }
-        .divider {
-            margin: 14px auto 0; width: 120px; height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(200,140,255,.5), transparent)
-        }
+        .night .title .frase { color: #d4a8f8 }
+        .day   .title .frase { color: #1a5c00 }
 
+        .hint {
+            margin-top: 10px; font-size: clamp(9px,1.8vw,13px);
+            letter-spacing: 2px; opacity: .45; font-style: normal;
+            font-family: 'Helvetica Neue', sans-serif;
+            transition: color 1.2s;
+        }
+        .night .hint { color: #b888e8 }
+        .day   .hint { color: #2a7a00 }
+
+        .divider {
+            margin: 12px auto 0; width: 120px; height: 1px;
+            transition: background 1.2s;
+        }
+        .night .divider { background: linear-gradient(90deg,transparent,rgba(200,140,255,.5),transparent) }
+        .day   .divider { background: linear-gradient(90deg,transparent,rgba(80,160,40,.5),transparent) }
+
+        /* ESCENA */
         .scene {
             position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
             width: min(760px,100vw); height: min(560px,58vh); z-index: 5
@@ -89,49 +185,63 @@
 
         .ground-glow {
             position: absolute; bottom: 0; left: 0; width: 100%; height: 80px;
-            background: radial-gradient(ellipse at 50% 100%, rgba(160,80,220,.15) 0%, transparent 70%);
-            pointer-events: none
+            pointer-events: none; transition: background .8s
         }
+        .night .ground-glow { background: radial-gradient(ellipse at 50% 100%, rgba(160,80,220,.15) 0%, transparent 70%) }
+        .day   .ground-glow { background: radial-gradient(ellipse at 50% 100%, rgba(80,180,40,.15) 0%, transparent 70%) }
 
         @keyframes float {
             0%,100% { transform: translateY(0) }
-            50% { transform: translateY(-11px) }
+            50%      { transform: translateY(-11px) }
         }
         @keyframes floatCenter {
             0%,100% { transform: translateY(0) scale(1.12) }
-            50% { transform: translateY(-13px) scale(1.12) }
+            50%      { transform: translateY(-13px) scale(1.12) }
         }
+
+        /* Flores: transición de opacidad */
+        .flores-noche { transition: opacity 1s }
+        .flores-dia   { transition: opacity 1s }
+        .night .flores-noche { opacity: 1 }
+        .night .flores-dia   { opacity: 0 }
+        .day   .flores-noche { opacity: 0 }
+        .day   .flores-dia   { opacity: 1 }
 
         @media (max-width:480px) {
             .title { top: clamp(28px,6vh,50px) }
-            .divider { width: 80px; margin-top: 10px }
             .scene { height: min(480px,55vh) }
         }
         @media (max-height:500px) and (orientation:landscape) {
-            .title { top: 10px }
+            .title { top:10px }
             .title h1 { font-size: clamp(22px,6vw,40px) }
-            .title p { margin-top: 4px; font-size: clamp(10px,2vw,13px) }
-            .divider { margin-top: 6px }
             .scene { height: 75vh }
-            .moon { top: 8px; width: 28px; height: 28px }
+            .moon-sun { top:8px; width:28px; height:28px }
         }
     </style>
 </head>
 <body>
-<div class="garden">
+<div class="garden night" id="garden">
     <div class="aurora"></div>
+    <div class="clouds">
+        <div class="cloud cloud1"></div>
+        <div class="cloud cloud2"></div>
+        <div class="cloud cloud3"></div>
+    </div>
+    <div class="field"></div>
 
-    <div class="moon">
+    <div class="moon-sun" id="moonSun" title="Cambiar modo" onclick="toggleMode()">
         <div class="moon-crater" style="width:9px;height:9px;top:14px;left:28px"></div>
         <div class="moon-crater" style="width:6px;height:6px;top:30px;left:16px"></div>
         <div class="moon-crater" style="width:4px;height:4px;top:22px;left:22px"></div>
+        <div class="sun-rays" id="sunRays"></div>
     </div>
 
     <div class="stars" id="stars"></div>
 
     <div class="title">
         <h1>Luz</h1>
-        <p>"Eres la razón por la que creo que las cosas<br>más bonitas también pueden ser reales."</p>
+        <p class="frase" id="frase">"Eres la razón por la que creo que las cosas más bonitas también pueden ser reales."</p>
+        <p class="hint" id="hint">— toca la luna para cambiar —</p>
         <div class="divider"></div>
     </div>
 
@@ -139,17 +249,27 @@
         <div class="ground-glow"></div>
 
         <svg style="position:absolute;bottom:0;left:50%;transform:translateX(-50%);overflow:visible;width:min(560px,100vw);height:auto"
-            width="560" height="540" viewBox="0 0 560 540" preserveAspectRatio="xMidYMax meet">
+            width="560" height="540" viewBox="0 0 560 540" preserveAspectRatio="xMidYMax meet" id="mainSvg">
             <defs>
                 <linearGradient id="potGrad" x1="0%" y1="0%" x2="100%" y2="0%">
                     <stop offset="0%" stop-color="#1a0a2e"/>
                     <stop offset="40%" stop-color="#2d1050"/>
                     <stop offset="100%" stop-color="#120820"/>
                 </linearGradient>
+                <linearGradient id="potGradDay" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="#5c3010"/>
+                    <stop offset="40%" stop-color="#8c4a20"/>
+                    <stop offset="100%" stop-color="#3e2008"/>
+                </linearGradient>
                 <linearGradient id="potRimGrad" x1="0%" y1="0%" x2="100%" y2="0%">
                     <stop offset="0%" stop-color="#4a2870"/>
                     <stop offset="50%" stop-color="#6a3a98"/>
                     <stop offset="100%" stop-color="#3a1e58"/>
+                </linearGradient>
+                <linearGradient id="potRimGradDay" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="#8c5228"/>
+                    <stop offset="50%" stop-color="#b86a30"/>
+                    <stop offset="100%" stop-color="#6e3e1c"/>
                 </linearGradient>
                 <linearGradient id="stemGrad" x1="0%" y1="0%" x2="100%" y2="0%">
                     <stop offset="0%" stop-color="#1a3a10"/>
@@ -160,132 +280,327 @@
                     <stop offset="0%" stop-color="#18083a"/>
                     <stop offset="100%" stop-color="#0c0420"/>
                 </linearGradient>
+                <linearGradient id="soilGradDay" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stop-color="#3a1c08"/>
+                    <stop offset="100%" stop-color="#200e04"/>
+                </linearGradient>
 
-                <!-- Tulipán morado/lila - pétalo -->
-                <radialGradient id="tulipPurple" cx="50%" cy="20%" r="80%">
-                    <stop offset="0%" stop-color="#e8b8ff"/>
-                    <stop offset="50%" stop-color="#b060e8"/>
-                    <stop offset="100%" stop-color="#7020c0"/>
+                <!-- NOCHE: tulipanes morado/rosa/lila -->
+                <linearGradient id="tulipPurple" x1="0%" y1="100%" x2="30%" y2="0%">
+                    <stop offset="0%" stop-color="#5c1aa0"/>
+                    <stop offset="45%" stop-color="#9744d6"/>
+                    <stop offset="80%" stop-color="#cb8cf2"/>
+                    <stop offset="100%" stop-color="#f3ddff"/>
+                </linearGradient>
+                <linearGradient id="tulipPink" x1="0%" y1="100%" x2="30%" y2="0%">
+                    <stop offset="0%" stop-color="#9c1463"/>
+                    <stop offset="45%" stop-color="#e0529e"/>
+                    <stop offset="80%" stop-color="#f8a3d4"/>
+                    <stop offset="100%" stop-color="#ffe3f2"/>
+                </linearGradient>
+                <linearGradient id="tulipLavender" x1="0%" y1="100%" x2="30%" y2="0%">
+                    <stop offset="0%" stop-color="#7430b8"/>
+                    <stop offset="45%" stop-color="#ad6eea"/>
+                    <stop offset="80%" stop-color="#dab8fa"/>
+                    <stop offset="100%" stop-color="#f8ecff"/>
+                </linearGradient>
+                <linearGradient id="tulipPurpleShade" x1="0%" y1="100%" x2="0%" y2="0%">
+                    <stop offset="0%" stop-color="#3a0d6e"/>
+                    <stop offset="100%" stop-color="#7e3cc4"/>
+                </linearGradient>
+                <linearGradient id="tulipPinkShade" x1="0%" y1="100%" x2="0%" y2="0%">
+                    <stop offset="0%" stop-color="#74104a"/>
+                    <stop offset="100%" stop-color="#c8418a"/>
+                </linearGradient>
+                <linearGradient id="tulipLavenderShade" x1="0%" y1="100%" x2="0%" y2="0%">
+                    <stop offset="0%" stop-color="#511f8c"/>
+                    <stop offset="100%" stop-color="#9456d8"/>
+                </linearGradient>
+
+                <!-- DÍA: flores rojas/amarillas/naranjas tipo peonía -->
+                <radialGradient id="roseRed" cx="38%" cy="30%" r="75%">
+                    <stop offset="0%" stop-color="#ffd9d9"/>
+                    <stop offset="35%" stop-color="#f56262"/>
+                    <stop offset="70%" stop-color="#d41f1f"/>
+                    <stop offset="100%" stop-color="#8a0a0a"/>
                 </radialGradient>
-                <!-- Tulipán rosa -->
-                <radialGradient id="tulipPink" cx="50%" cy="20%" r="80%">
-                    <stop offset="0%" stop-color="#ffb8e8"/>
-                    <stop offset="50%" stop-color="#e860b0"/>
-                    <stop offset="100%" stop-color="#c02080"/>
+                <radialGradient id="roseYellow" cx="38%" cy="30%" r="75%">
+                    <stop offset="0%" stop-color="#fffae0"/>
+                    <stop offset="35%" stop-color="#ffd84d"/>
+                    <stop offset="70%" stop-color="#f0a800"/>
+                    <stop offset="100%" stop-color="#a85e00"/>
                 </radialGradient>
-                <!-- Tulipán lila claro -->
-                <radialGradient id="tulipLavender" cx="50%" cy="20%" r="80%">
-                    <stop offset="0%" stop-color="#f0d8ff"/>
-                    <stop offset="50%" stop-color="#c890f8"/>
-                    <stop offset="100%" stop-color="#9050d0"/>
+                <radialGradient id="roseOrange" cx="38%" cy="30%" r="75%">
+                    <stop offset="0%" stop-color="#ffe7c2"/>
+                    <stop offset="35%" stop-color="#ff9c44"/>
+                    <stop offset="70%" stop-color="#e85f00"/>
+                    <stop offset="100%" stop-color="#963c00"/>
+                </radialGradient>
+                <radialGradient id="centerYellow" cx="50%" cy="40%" r="60%">
+                    <stop offset="0%" stop-color="#fff7c0"/>
+                    <stop offset="60%" stop-color="#ffce3d"/>
+                    <stop offset="100%" stop-color="#e8950a"/>
+                </radialGradient>
+                <radialGradient id="centerOrangeDeep" cx="50%" cy="40%" r="60%">
+                    <stop offset="0%" stop-color="#ffe9a8"/>
+                    <stop offset="60%" stop-color="#f0992a"/>
+                    <stop offset="100%" stop-color="#a8520a"/>
                 </radialGradient>
 
                 <radialGradient id="glowPurple" cx="50%" cy="50%" r="50%">
                     <stop offset="0%" stop-color="rgba(180,100,255,0.18)"/>
                     <stop offset="100%" stop-color="rgba(180,100,255,0)"/>
                 </radialGradient>
-
-                <!-- Interior del tulipán -->
+                <radialGradient id="glowSun" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stop-color="rgba(255,200,60,0.18)"/>
+                    <stop offset="100%" stop-color="rgba(255,200,60,0)"/>
+                </radialGradient>
                 <radialGradient id="tulipInner" cx="50%" cy="80%" r="60%">
                     <stop offset="0%" stop-color="rgba(40,0,80,0.6)"/>
                     <stop offset="100%" stop-color="rgba(40,0,80,0)"/>
                 </radialGradient>
+                <radialGradient id="roseInner" cx="50%" cy="80%" r="60%">
+                    <stop offset="0%" stop-color="rgba(80,0,0,0.5)"/>
+                    <stop offset="100%" stop-color="rgba(80,0,0,0)"/>
+                </radialGradient>
+
+                <!-- Pétalo de tulipán reutilizable: base en (0,0), punta hacia arriba -->
+                <path id="tulipPetal" d="M0,0 C-13,-5 -19,-22 -15,-40 C-12,-54 -6,-61 0,-64
+                             C6,-61 12,-54 15,-40 C19,-22 13,-5 0,0 Z"/>
             </defs>
 
-            <!-- Maceta -->
-            <polygon points="210,410 350,410 330,500 230,500" fill="url(#potGrad)" stroke="#4a2870" stroke-width="1.5"/>
-            <rect x="200" y="402" width="160" height="14" rx="3" fill="url(#potRimGrad)"/>
-            <ellipse cx="280" cy="407" rx="72" ry="9" fill="url(#soilGrad)" stroke="#2d1050" stroke-width="1"/>
+            <!-- MACETA NOCHE -->
+            <g class="flores-noche">
+                <polygon points="210,410 350,410 330,500 230,500" fill="url(#potGrad)" stroke="#4a2870" stroke-width="1.5"/>
+                <rect x="200" y="402" width="160" height="14" rx="3" fill="url(#potRimGrad)"/>
+                <ellipse cx="280" cy="407" rx="72" ry="9" fill="url(#soilGrad)" stroke="#2d1050" stroke-width="1"/>
+            </g>
+            <!-- MACETA DÍA -->
+            <g class="flores-dia">
+                <polygon points="210,410 350,410 330,500 230,500" fill="url(#potGradDay)" stroke="#8c4a20" stroke-width="1.5"/>
+                <rect x="200" y="402" width="160" height="14" rx="3" fill="url(#potRimGradDay)"/>
+                <ellipse cx="280" cy="407" rx="72" ry="9" fill="url(#soilGradDay)" stroke="#6e3e1c" stroke-width="1"/>
+            </g>
 
-            <!-- Tallos principales -->
+            <!-- Tallos (compartidos) -->
             <path d="M280,430 C278,380 279,350 280,310 C281,270 280,250 280,205" stroke="url(#stemGrad)" stroke-width="6" fill="none" stroke-linecap="round"/>
             <path d="M275,425 C265,375 252,345 238,308 C226,275 218,255 205,218" stroke="url(#stemGrad)" stroke-width="5" fill="none" stroke-linecap="round"/>
             <path d="M285,425 C295,375 308,345 322,308 C334,275 342,255 355,218" stroke="url(#stemGrad)" stroke-width="5" fill="none" stroke-linecap="round"/>
             <path d="M277,428 C268,378 255,342 243,215" stroke="url(#stemGrad)" stroke-width="4.5" fill="none" stroke-linecap="round"/>
             <path d="M283,428 C292,378 305,342 317,215" stroke="url(#stemGrad)" stroke-width="4.5" fill="none" stroke-linecap="round"/>
-
             <!-- Hojas -->
             <path d="M263,295 C245,282 236,265 248,250 C258,262 263,278 263,295Z" fill="#2a4a14" stroke="#3a6020" stroke-width="1"/>
             <path d="M252,338 C232,326 224,308 237,292 C248,304 254,320 252,338Z" fill="#223c10" stroke="#3a6020" stroke-width="1"/>
             <path d="M297,295 C315,282 324,265 312,250 C302,262 297,278 297,295Z" fill="#2a4a14" stroke="#3a6020" stroke-width="1"/>
             <path d="M308,338 C328,326 336,308 323,292 C312,304 306,320 308,338Z" fill="#223c10" stroke="#3a6020" stroke-width="1"/>
-
-            <!-- Conectores tallos laterales -->
             <line x1="200" y1="228" x2="252" y2="428" stroke="url(#stemGrad)" stroke-width="3" stroke-linecap="round"/>
             <line x1="360" y1="228" x2="308" y2="428" stroke="url(#stemGrad)" stroke-width="3" stroke-linecap="round"/>
 
-            <!-- Maceta al frente (overlay) -->
-            <polygon points="210,410 350,410 330,500 230,500" fill="url(#potGrad)" stroke="#4a2870" stroke-width="1.5"/>
-            <rect x="200" y="402" width="160" height="14" rx="3" fill="url(#potRimGrad)"/>
+            <!-- MACETA FRONTAL NOCHE -->
+            <g class="flores-noche">
+                <polygon points="210,410 350,410 330,500 230,500" fill="url(#potGrad)" stroke="#4a2870" stroke-width="1.5"/>
+                <rect x="200" y="402" width="160" height="14" rx="3" fill="url(#potRimGrad)"/>
+            </g>
+            <!-- MACETA FRONTAL DÍA -->
+            <g class="flores-dia">
+                <polygon points="210,410 350,410 330,500 230,500" fill="url(#potGradDay)" stroke="#8c4a20" stroke-width="1.5"/>
+                <rect x="200" y="402" width="160" height="14" rx="3" fill="url(#potRimGradDay)"/>
+            </g>
 
-            <!-- Glows -->
-            <ellipse cx="205" cy="220" rx="80" ry="80" fill="url(#glowPurple)"/>
-            <ellipse cx="280" cy="195" rx="95" ry="95" fill="url(#glowPurple)"/>
-            <ellipse cx="355" cy="220" rx="80" ry="80" fill="url(#glowPurple)"/>
+            <!-- GLOWS NOCHE -->
+            <g class="flores-noche">
+                <ellipse cx="205" cy="220" rx="80" ry="80" fill="url(#glowPurple)"/>
+                <ellipse cx="280" cy="195" rx="95" ry="95" fill="url(#glowPurple)"/>
+                <ellipse cx="355" cy="220" rx="80" ry="80" fill="url(#glowPurple)"/>
+            </g>
+            <!-- GLOWS DÍA -->
+            <g class="flores-dia">
+                <ellipse cx="205" cy="220" rx="80" ry="80" fill="url(#glowSun)"/>
+                <ellipse cx="280" cy="195" rx="95" ry="95" fill="url(#glowSun)"/>
+                <ellipse cx="355" cy="220" rx="80" ry="80" fill="url(#glowSun)"/>
+            </g>
 
-            <!-- TULIPÁN IZQUIERDO (morado) -->
-            <g style="animation:float 4s ease-in-out infinite">
-                <g transform="translate(205,222)">
-                    <!-- pétalos traseros -->
-                    <path d="M-14,-10 C-20,-38 -14,-62 0,-68 C14,-62 20,-38 14,-10 Z" fill="url(#tulipPurple)" opacity="0.75"/>
-                    <path d="M14,-10 C28,-30 38,-52 28,-66 C16,-60 8,-38 14,-10 Z" fill="url(#tulipPurple)" opacity="0.75"/>
-                    <path d="M-14,-10 C-28,-30 -38,-52 -28,-66 C-16,-60 -8,-38 -14,-10 Z" fill="url(#tulipPurple)" opacity="0.75"/>
-                    <!-- pétalos frontales -->
-                    <path d="M-8,0 C-18,-28 -16,-56 0,-64 C16,-56 18,-28 8,0 Z" fill="url(#tulipPurple)"/>
-                    <path d="M8,0 C22,-20 30,-48 20,-62 C10,-56 4,-28 8,0 Z" fill="url(#tulipPurple)"/>
-                    <path d="M-8,0 C-22,-20 -30,-48 -20,-62 C-10,-56 -4,-28 -8,0 Z" fill="url(#tulipPurple)"/>
-                    <!-- sombra interior -->
-                    <ellipse cx="0" cy="-20" rx="12" ry="20" fill="url(#tulipInner)" opacity="0.5"/>
+            <!-- ===== FLORES NOCHE: TULIPANES (pétalos individuales en capas) ===== -->
+            <g class="flores-noche">
+                <!-- Izquierdo morado -->
+                <g style="animation:float 4s ease-in-out infinite">
+                    <g transform="translate(205,224)">
+                        <!-- capa trasera, pétalos abiertos -->
+                        <use href="#tulipPetal" fill="url(#tulipPurpleShade)" transform="rotate(-34) scale(0.92)"/>
+                        <use href="#tulipPetal" fill="url(#tulipPurpleShade)" transform="rotate(34) scale(0.92)"/>
+                        <!-- capa delantera, pétalos cerrados -->
+                        <use href="#tulipPetal" fill="url(#tulipPurple)" transform="rotate(-15) scale(1.05)"/>
+                        <use href="#tulipPetal" fill="url(#tulipPurple)" transform="rotate(15) scale(1.05)"/>
+                        <use href="#tulipPetal" fill="url(#tulipPurple)" transform="scale(1.08)"/>
+                        <!-- sombra interior sutil -->
+                        <ellipse cx="0" cy="-16" rx="9" ry="16" fill="#2c0a52" opacity="0.35"/>
+                        <ellipse cx="-3" cy="-30" rx="3" ry="9" fill="#fbe8ff" opacity="0.5"/>
+                    </g>
+                </g>
+                <!-- Central lila (más grande, foco de la composición) -->
+                <g style="animation:floatCenter 4.5s ease-in-out infinite">
+                    <g transform="translate(280,197) scale(1.18)">
+                        <use href="#tulipPetal" fill="url(#tulipLavenderShade)" transform="rotate(-34) scale(0.92)"/>
+                        <use href="#tulipPetal" fill="url(#tulipLavenderShade)" transform="rotate(34) scale(0.92)"/>
+                        <use href="#tulipPetal" fill="url(#tulipLavender)" transform="rotate(-15) scale(1.05)"/>
+                        <use href="#tulipPetal" fill="url(#tulipLavender)" transform="rotate(15) scale(1.05)"/>
+                        <use href="#tulipPetal" fill="url(#tulipLavender)" transform="scale(1.08)"/>
+                        <ellipse cx="0" cy="-18" rx="10" ry="18" fill="#3a1466" opacity="0.32"/>
+                        <ellipse cx="-3" cy="-34" rx="3.4" ry="10" fill="#fdf2ff" opacity="0.55"/>
+                    </g>
+                </g>
+                <!-- Derecho rosa -->
+                <g style="animation:float 3.8s ease-in-out infinite .4s">
+                    <g transform="translate(355,224)">
+                        <use href="#tulipPetal" fill="url(#tulipPinkShade)" transform="rotate(-34) scale(0.92)"/>
+                        <use href="#tulipPetal" fill="url(#tulipPinkShade)" transform="rotate(34) scale(0.92)"/>
+                        <use href="#tulipPetal" fill="url(#tulipPink)" transform="rotate(-15) scale(1.05)"/>
+                        <use href="#tulipPetal" fill="url(#tulipPink)" transform="rotate(15) scale(1.05)"/>
+                        <use href="#tulipPetal" fill="url(#tulipPink)" transform="scale(1.08)"/>
+                        <ellipse cx="0" cy="-16" rx="9" ry="16" fill="#5e0c3a" opacity="0.32"/>
+                        <ellipse cx="-3" cy="-30" rx="3" ry="9" fill="#fff0fa" opacity="0.5"/>
+                    </g>
+                </g>
+                <!-- Secundario izquierdo (más pequeño, detrás) -->
+                <g style="animation:float 4.2s ease-in-out infinite .2s">
+                    <g transform="translate(241,217) scale(0.74)">
+                        <use href="#tulipPetal" fill="url(#tulipPurpleShade)" transform="rotate(-34) scale(0.9)"/>
+                        <use href="#tulipPetal" fill="url(#tulipPurpleShade)" transform="rotate(34) scale(0.9)"/>
+                        <use href="#tulipPetal" fill="url(#tulipPurple)" transform="rotate(-15)"/>
+                        <use href="#tulipPetal" fill="url(#tulipPurple)" transform="rotate(15)"/>
+                        <use href="#tulipPetal" fill="url(#tulipPurple)"/>
+                    </g>
+                </g>
+                <!-- Secundario derecho (más pequeño, detrás) -->
+                <g style="animation:float 3.5s ease-in-out infinite .6s">
+                    <g transform="translate(319,217) scale(0.7)">
+                        <use href="#tulipPetal" fill="url(#tulipPinkShade)" transform="rotate(-34) scale(0.9)"/>
+                        <use href="#tulipPetal" fill="url(#tulipPinkShade)" transform="rotate(34) scale(0.9)"/>
+                        <use href="#tulipPetal" fill="url(#tulipPink)" transform="rotate(-15)"/>
+                        <use href="#tulipPetal" fill="url(#tulipPink)" transform="rotate(15)"/>
+                        <use href="#tulipPetal" fill="url(#tulipPink)"/>
+                    </g>
                 </g>
             </g>
 
-            <!-- TULIPÁN CENTRAL (lila, más grande) -->
-            <g style="animation:floatCenter 4.5s ease-in-out infinite">
-                <g transform="translate(280,195) scale(1.15)">
-                    <path d="M-16,-12 C-24,-44 -16,-72 0,-80 C16,-72 24,-44 16,-12 Z" fill="url(#tulipLavender)" opacity="0.75"/>
-                    <path d="M16,-12 C32,-36 44,-62 32,-78 C18,-70 10,-44 16,-12 Z" fill="url(#tulipLavender)" opacity="0.75"/>
-                    <path d="M-16,-12 C-32,-36 -44,-62 -32,-78 C-18,-70 -10,-44 -16,-12 Z" fill="url(#tulipLavender)" opacity="0.75"/>
-                    <path d="M-9,0 C-22,-32 -18,-66 0,-76 C18,-66 22,-32 9,0 Z" fill="url(#tulipLavender)"/>
-                    <path d="M9,0 C26,-24 36,-56 24,-74 C12,-66 5,-34 9,0 Z" fill="url(#tulipLavender)"/>
-                    <path d="M-9,0 C-26,-24 -36,-56 -24,-74 C-12,-66 -5,-34 -9,0 Z" fill="url(#tulipLavender)"/>
-                    <ellipse cx="0" cy="-24" rx="14" ry="24" fill="url(#tulipInner)" opacity="0.45"/>
+            <!-- ===== FLORES DÍA: PEONÍAS (doble capa de pétalos redondeados + centro) ===== -->
+            <g class="flores-dia">
+                <!-- Peonía roja izquierda -->
+                <g style="animation:float 4s ease-in-out infinite">
+                    <g transform="translate(205,228)">
+                        <!-- capa trasera: 6 pétalos redondos abiertos -->
+                        <g fill="url(#roseRed)" opacity="0.92">
+                            <ellipse cx="0" cy="-30" rx="13" ry="19" transform="rotate(0)"/>
+                            <ellipse cx="0" cy="-30" rx="13" ry="19" transform="rotate(60)"/>
+                            <ellipse cx="0" cy="-30" rx="13" ry="19" transform="rotate(120)"/>
+                            <ellipse cx="0" cy="-30" rx="13" ry="19" transform="rotate(180)"/>
+                            <ellipse cx="0" cy="-30" rx="13" ry="19" transform="rotate(240)"/>
+                            <ellipse cx="0" cy="-30" rx="13" ry="19" transform="rotate(300)"/>
+                        </g>
+                        <!-- capa delantera: 5 pétalos más chicos, rotados intercalado -->
+                        <g fill="url(#roseRed)">
+                            <ellipse cx="0" cy="-20" rx="10" ry="14" transform="rotate(30)"/>
+                            <ellipse cx="0" cy="-20" rx="10" ry="14" transform="rotate(102)"/>
+                            <ellipse cx="0" cy="-20" rx="10" ry="14" transform="rotate(174)"/>
+                            <ellipse cx="0" cy="-20" rx="10" ry="14" transform="rotate(246)"/>
+                            <ellipse cx="0" cy="-20" rx="10" ry="14" transform="rotate(318)"/>
+                        </g>
+                        <!-- centro con estambres -->
+                        <circle cx="0" cy="-16" r="7.5" fill="url(#centerYellow)"/>
+                        <g stroke="#a85e00" stroke-width="1" stroke-linecap="round" opacity="0.75">
+                            <line x1="0" y1="-16" x2="-5" y2="-22"/>
+                            <line x1="0" y1="-16" x2="5" y2="-22"/>
+                            <line x1="0" y1="-16" x2="-6" y2="-13"/>
+                            <line x1="0" y1="-16" x2="6" y2="-13"/>
+                            <line x1="0" y1="-16" x2="0" y2="-23"/>
+                        </g>
+                        <ellipse cx="0" cy="-32" rx="9" ry="13" fill="url(#roseInner)" opacity="0.3"/>
+                    </g>
                 </g>
-            </g>
-
-            <!-- TULIPÁN DERECHO (rosa) -->
-            <g style="animation:float 3.8s ease-in-out infinite .4s">
-                <g transform="translate(355,222)">
-                    <path d="M-14,-10 C-20,-38 -14,-62 0,-68 C14,-62 20,-38 14,-10 Z" fill="url(#tulipPink)" opacity="0.75"/>
-                    <path d="M14,-10 C28,-30 38,-52 28,-66 C16,-60 8,-38 14,-10 Z" fill="url(#tulipPink)" opacity="0.75"/>
-                    <path d="M-14,-10 C-28,-30 -38,-52 -28,-66 C-16,-60 -8,-38 -14,-10 Z" fill="url(#tulipPink)" opacity="0.75"/>
-                    <path d="M-8,0 C-18,-28 -16,-56 0,-64 C16,-56 18,-28 8,0 Z" fill="url(#tulipPink)"/>
-                    <path d="M8,0 C22,-20 30,-48 20,-62 C10,-56 4,-28 8,0 Z" fill="url(#tulipPink)"/>
-                    <path d="M-8,0 C-22,-20 -30,-48 -20,-62 C-10,-56 -4,-28 -8,0 Z" fill="url(#tulipPink)"/>
-                    <ellipse cx="0" cy="-20" rx="12" ry="20" fill="url(#tulipInner)" opacity="0.5"/>
+                <!-- Peonía amarilla central (más grande, foco de la composición) -->
+                <g style="animation:floatCenter 4.5s ease-in-out infinite">
+                    <g transform="translate(280,198) scale(1.2)">
+                        <g fill="url(#roseYellow)" opacity="0.92">
+                            <ellipse cx="0" cy="-32" rx="15" ry="22" transform="rotate(0)"/>
+                            <ellipse cx="0" cy="-32" rx="15" ry="22" transform="rotate(51)"/>
+                            <ellipse cx="0" cy="-32" rx="15" ry="22" transform="rotate(102)"/>
+                            <ellipse cx="0" cy="-32" rx="15" ry="22" transform="rotate(154)"/>
+                            <ellipse cx="0" cy="-32" rx="15" ry="22" transform="rotate(206)"/>
+                            <ellipse cx="0" cy="-32" rx="15" ry="22" transform="rotate(257)"/>
+                            <ellipse cx="0" cy="-32" rx="15" ry="22" transform="rotate(309)"/>
+                        </g>
+                        <g fill="url(#roseYellow)">
+                            <ellipse cx="0" cy="-21" rx="11.5" ry="16" transform="rotate(26)"/>
+                            <ellipse cx="0" cy="-21" rx="11.5" ry="16" transform="rotate(90)"/>
+                            <ellipse cx="0" cy="-21" rx="11.5" ry="16" transform="rotate(154)"/>
+                            <ellipse cx="0" cy="-21" rx="11.5" ry="16" transform="rotate(218)"/>
+                            <ellipse cx="0" cy="-21" rx="11.5" ry="16" transform="rotate(282)"/>
+                        </g>
+                        <circle cx="0" cy="-17" r="8.5" fill="url(#centerOrangeDeep)"/>
+                        <g stroke="#a8520a" stroke-width="1.1" stroke-linecap="round" opacity="0.75">
+                            <line x1="0" y1="-17" x2="-6" y2="-24"/>
+                            <line x1="0" y1="-17" x2="6" y2="-24"/>
+                            <line x1="0" y1="-17" x2="-7" y2="-14"/>
+                            <line x1="0" y1="-17" x2="7" y2="-14"/>
+                            <line x1="0" y1="-17" x2="0" y2="-25"/>
+                        </g>
+                        <ellipse cx="0" cy="-35" rx="10" ry="15" fill="url(#roseInner)" opacity="0.22"/>
+                    </g>
                 </g>
-            </g>
-
-            <!-- TULIPÁN SECUNDARIO IZQUIERDO (morado pequeño) -->
-            <g style="animation:float 4.2s ease-in-out infinite .2s">
-                <g transform="translate(243,215) scale(0.82)">
-                    <path d="M-12,-8 C-18,-32 -12,-54 0,-60 C12,-54 18,-32 12,-8 Z" fill="url(#tulipPurple)" opacity="0.7"/>
-                    <path d="M12,-8 C24,-26 32,-46 22,-58 C12,-52 6,-30 12,-8 Z" fill="url(#tulipPurple)" opacity="0.7"/>
-                    <path d="M-12,-8 C-24,-26 -32,-46 -22,-58 C-12,-52 -6,-30 -12,-8 Z" fill="url(#tulipPurple)" opacity="0.7"/>
-                    <path d="M-7,0 C-16,-24 -14,-50 0,-58 C14,-50 16,-24 7,0 Z" fill="url(#tulipPurple)"/>
-                    <path d="M7,0 C18,-18 26,-42 16,-56 C8,-50 2,-24 7,0 Z" fill="url(#tulipPurple)"/>
-                    <path d="M-7,0 C-18,-18 -26,-42 -16,-56 C-8,-50 -2,-24 -7,0 Z" fill="url(#tulipPurple)"/>
+                <!-- Peonía naranja derecha -->
+                <g style="animation:float 3.8s ease-in-out infinite .4s">
+                    <g transform="translate(355,228)">
+                        <g fill="url(#roseOrange)" opacity="0.92">
+                            <ellipse cx="0" cy="-30" rx="13" ry="19" transform="rotate(0)"/>
+                            <ellipse cx="0" cy="-30" rx="13" ry="19" transform="rotate(60)"/>
+                            <ellipse cx="0" cy="-30" rx="13" ry="19" transform="rotate(120)"/>
+                            <ellipse cx="0" cy="-30" rx="13" ry="19" transform="rotate(180)"/>
+                            <ellipse cx="0" cy="-30" rx="13" ry="19" transform="rotate(240)"/>
+                            <ellipse cx="0" cy="-30" rx="13" ry="19" transform="rotate(300)"/>
+                        </g>
+                        <g fill="url(#roseOrange)">
+                            <ellipse cx="0" cy="-20" rx="10" ry="14" transform="rotate(30)"/>
+                            <ellipse cx="0" cy="-20" rx="10" ry="14" transform="rotate(102)"/>
+                            <ellipse cx="0" cy="-20" rx="10" ry="14" transform="rotate(174)"/>
+                            <ellipse cx="0" cy="-20" rx="10" ry="14" transform="rotate(246)"/>
+                            <ellipse cx="0" cy="-20" rx="10" ry="14" transform="rotate(318)"/>
+                        </g>
+                        <circle cx="0" cy="-16" r="7.5" fill="url(#centerYellow)"/>
+                        <g stroke="#a8520a" stroke-width="1" stroke-linecap="round" opacity="0.75">
+                            <line x1="0" y1="-16" x2="-5" y2="-22"/>
+                            <line x1="0" y1="-16" x2="5" y2="-22"/>
+                            <line x1="0" y1="-16" x2="-6" y2="-13"/>
+                            <line x1="0" y1="-16" x2="6" y2="-13"/>
+                            <line x1="0" y1="-16" x2="0" y2="-23"/>
+                        </g>
+                        <ellipse cx="0" cy="-32" rx="9" ry="13" fill="url(#roseInner)" opacity="0.3"/>
+                    </g>
                 </g>
-            </g>
-
-            <!-- TULIPÁN SECUNDARIO DERECHO (rosa pequeño) -->
-            <g style="animation:float 3.5s ease-in-out infinite .6s">
-                <g transform="translate(317,215) scale(0.78)">
-                    <path d="M-12,-8 C-18,-32 -12,-54 0,-60 C12,-54 18,-32 12,-8 Z" fill="url(#tulipPink)" opacity="0.7"/>
-                    <path d="M12,-8 C24,-26 32,-46 22,-58 C12,-52 6,-30 12,-8 Z" fill="url(#tulipPink)" opacity="0.7"/>
-                    <path d="M-12,-8 C-24,-26 -32,-46 -22,-58 C-12,-52 -6,-30 -12,-8 Z" fill="url(#tulipPink)" opacity="0.7"/>
-                    <path d="M-7,0 C-16,-24 -14,-50 0,-58 C14,-50 16,-24 7,0 Z" fill="url(#tulipPink)"/>
-                    <path d="M7,0 C18,-18 26,-42 16,-56 C8,-50 2,-24 7,0 Z" fill="url(#tulipPink)"/>
-                    <path d="M-7,0 C-18,-18 -26,-42 -16,-56 C-8,-50 -2,-24 -7,0 Z" fill="url(#tulipPink)"/>
+                <!-- Peonía pequeña roja, izq, detrás -->
+                <g style="animation:float 4.2s ease-in-out infinite .2s">
+                    <g transform="translate(241,219) scale(0.72)">
+                        <g fill="url(#roseRed)" opacity="0.9">
+                            <ellipse cx="0" cy="-28" rx="12" ry="17" transform="rotate(0)"/>
+                            <ellipse cx="0" cy="-28" rx="12" ry="17" transform="rotate(72)"/>
+                            <ellipse cx="0" cy="-28" rx="12" ry="17" transform="rotate(144)"/>
+                            <ellipse cx="0" cy="-28" rx="12" ry="17" transform="rotate(216)"/>
+                            <ellipse cx="0" cy="-28" rx="12" ry="17" transform="rotate(288)"/>
+                        </g>
+                        <circle cx="0" cy="-19" r="7" fill="url(#centerYellow)"/>
+                    </g>
+                </g>
+                <!-- Peonía pequeña naranja, der, detrás -->
+                <g style="animation:float 3.5s ease-in-out infinite .6s">
+                    <g transform="translate(319,219) scale(0.68)">
+                        <g fill="url(#roseOrange)" opacity="0.9">
+                            <ellipse cx="0" cy="-28" rx="12" ry="17" transform="rotate(0)"/>
+                            <ellipse cx="0" cy="-28" rx="12" ry="17" transform="rotate(72)"/>
+                            <ellipse cx="0" cy="-28" rx="12" ry="17" transform="rotate(144)"/>
+                            <ellipse cx="0" cy="-28" rx="12" ry="17" transform="rotate(216)"/>
+                            <ellipse cx="0" cy="-28" rx="12" ry="17" transform="rotate(288)"/>
+                        </g>
+                        <circle cx="0" cy="-19" r="7" fill="url(#centerYellow)"/>
+                    </g>
                 </g>
             </g>
 
@@ -296,17 +611,15 @@
 </div>
 
 <script>
-    const svg = document.querySelector('.scene svg');
+    // ViewBox responsive
+    const svg = document.getElementById('mainSvg');
     function updateViewBox() {
-        if (window.innerWidth <= 600) {
-            svg.setAttribute('viewBox', '60 140 440 400');
-        } else {
-            svg.setAttribute('viewBox', '0 0 560 540');
-        }
+        svg.setAttribute('viewBox', window.innerWidth <= 600 ? '60 140 440 400' : '0 0 560 540');
     }
     updateViewBox();
     window.addEventListener('resize', updateViewBox);
 
+    // Estrellas
     const starsEl = document.getElementById('stars');
     const starData = [
         {t:6,l:8,s:'big',d:3.2},{t:14,l:18,s:'sm',d:2.1},{t:5,l:28,s:'big',d:4},{t:22,l:35,s:'sm',d:1.8},
@@ -322,9 +635,49 @@
         starsEl.appendChild(el);
     });
 
+    // Rayos del sol
+    const sunRays = document.getElementById('sunRays');
+    for (let i = 0; i < 8; i++) {
+        const ray = document.createElement('div');
+        ray.className = 'sun-ray';
+        ray.style.transform = `rotate(${i * 45}deg) translateX(50%)`;
+        sunRays.appendChild(ray);
+    }
+
+    // Toggle modo
+    let isDay = false;
+    const fraseNoche = '"Eres la razón por la que creo que las cosas más bonitas también pueden ser reales."';
+    const fraseDir   = '"Contigo, hasta los días más simples se sienten llenos de luz, mi niña."';
+    const hintNoche  = '— toca la luna para cambiar —';
+    const hintDia    = '— toca el sol para cambiar —';
+
+    function toggleMode() {
+        isDay = !isDay;
+        const garden = document.getElementById('garden');
+        const frase  = document.getElementById('frase');
+        const hint   = document.getElementById('hint');
+        garden.classList.toggle('night', !isDay);
+        garden.classList.toggle('day', isDay);
+        // Fade frase
+        frase.style.opacity = '0';
+        hint.style.opacity  = '0';
+        setTimeout(() => {
+            frase.textContent = isDay ? fraseDir : fraseNoche;
+            hint.textContent  = isDay ? hintDia  : hintNoche;
+            frase.style.opacity = '1';
+            hint.style.opacity  = '0.45';
+        }, 400);
+        // Cambiar color partículas
+        particles.forEach(p => {
+            p.hue = isDay ? Math.random()*40 + 80 : Math.random()*60 + 260;
+        });
+    }
+
+    // Partículas
     const canvas = document.getElementById('particles');
-    const ctx = canvas.getContext('2d');
-    let W, H, particles = [];
+    const ctx    = canvas.getContext('2d');
+    let W, H;
+    const particles = [];
     function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight }
     resize();
     window.addEventListener('resize', resize);
