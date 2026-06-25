@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Para mi niña 💕</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #1a0010 0%, #2d0020 50%, #1a0010 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Georgia', serif;
+    overflow: hidden;
+    position: relative;
+  }
+
+  canvas {
+    position: fixed;
+    top: 0; left: 0;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .card {
+    position: relative;
+    z-index: 10;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,150,180,0.3);
+    border-radius: 24px;
+    padding: 48px 40px;
+    max-width: 480px;
+    width: 90%;
+    text-align: center;
+    backdrop-filter: blur(12px);
+    box-shadow: 0 0 60px rgba(255,80,120,0.2), inset 0 0 40px rgba(255,80,120,0.05);
+  }
+
+  .heart-icon {
+    font-size: 64px;
+    display: block;
+    animation: heartbeat 1.4s ease-in-out infinite;
+    margin-bottom: 12px;
+    filter: drop-shadow(0 0 16px rgba(255,80,120,0.8));
+  }
+
+  @keyframes heartbeat {
+    0%, 100% { transform: scale(1); }
+    14% { transform: scale(1.18); }
+    28% { transform: scale(1); }
+    42% { transform: scale(1.12); }
+    70% { transform: scale(1); }
+  }
+
+  .name-label {
+    font-size: 12px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: rgba(255,150,180,0.6);
+    margin-bottom: 4px;
+    font-family: 'Helvetica Neue', sans-serif;
+  }
+
+  .name {
+    font-size: 26px;
+    color: #ff80a8;
+    margin-bottom: 20px;
+    font-style: italic;
+    text-shadow: 0 0 20px rgba(255,100,140,0.5);
+  }
+
+  .message {
+    font-size: 24px;
+    color: #fff;
+    line-height: 1.6;
+    margin-bottom: 8px;
+    font-style: italic;
+    text-shadow: 0 0 20px rgba(255,100,140,0.4);
+  }
+
+  .message span {
+    color: #ff80a8;
+  }
+
+  .sub {
+    font-size: 15px;
+    color: rgba(255,200,220,0.75);
+    line-height: 1.8;
+    font-style: normal;
+    font-family: 'Helvetica Neue', sans-serif;
+    margin-bottom: 24px;
+  }
+
+  .divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 20px 0;
+  }
+
+  .divider-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, transparent, rgba(255,120,160,0.5), transparent);
+  }
+
+  .divider-dot {
+    color: rgba(255,120,160,0.8);
+    font-size: 16px;
+  }
+
+  .btn {
+    background: linear-gradient(135deg, #c0325a, #e8507a);
+    border: none;
+    border-radius: 50px;
+    padding: 14px 36px;
+    color: white;
+    font-size: 15px;
+    cursor: pointer;
+    font-family: 'Helvetica Neue', sans-serif;
+    letter-spacing: 0.5px;
+    box-shadow: 0 4px 24px rgba(200,50,90,0.5);
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+
+  .btn:hover {
+    transform: scale(1.04);
+    box-shadow: 0 6px 32px rgba(200,50,90,0.7);
+  }
+
+  .btn:active { transform: scale(0.98); }
+
+  .footer-note {
+    margin-top: 20px;
+    font-size: 12px;
+    color: rgba(255,180,200,0.4);
+    font-family: 'Helvetica Neue', sans-serif;
+  }
+
+  .messages-list { display: none; }
+  .messages-list.visible { display: block; }
+
+  .msg-item {
+    font-size: 14px;
+    color: rgba(255,210,225,0.9);
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255,120,160,0.15);
+    font-family: 'Helvetica Neue', sans-serif;
+    line-height: 1.6;
+    animation: fadeIn 0.4s ease;
+  }
+
+  .msg-item:last-child { border-bottom: none; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+
+<div class="card">
+  <span class="heart-icon">❤️</span>
+  <p class="name-label">Para</p>
+  <p class="name">Luz Dahiana — mi niña</p>
+
+  <p class="message">
+    Te quiero <span>muchísimo</span>
+  </p>
+
+  <div class="divider">
+    <div class="divider-line"></div>
+    <span class="divider-dot">✦</span>
+    <div class="divider-line"></div>
+  </div>
+
+  <p class="sub">
+    Te quiero mucho mi niña,<br>
+    voy a estar contigo siempre.
+  </p>
+
+  <div class="messages-list" id="extras">
+    <div class="msg-item">🌸 Cada momento a tu lado vale todo para mí.</div>
+    <div class="msg-item">💌 Te quiero hoy, mañana y siempre, Luz.</div>
+    <div class="msg-item">🌹 Eres mi todo, y nunca lo olvides.</div>
+  </div>
+
+  <button class="btn" id="btnMore" onclick="showMore()">Ver más mensajes 💕</button>
+
+  <p class="footer-note">Hecho con todo el amor del mundo para mi niña 🌹</p>
+</div>
+
+<script>
+const canvas = document.getElementById('c');
+const ctx = canvas.getContext('2d');
+
+function resize() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+resize();
+window.addEventListener('resize', resize);
+
+const hearts = [];
+for (let i = 0; i < 35; i++) {
+  hearts.push({
+    x: Math.random() * window.innerWidth,
+    y: Math.random() * window.innerHeight + window.innerHeight,
+    size: Math.random() * 16 + 8,
+    speed: Math.random() * 0.6 + 0.3,
+    opacity: Math.random() * 0.5 + 0.1,
+    drift: (Math.random() - 0.5) * 0.4
+  });
+}
+
+function drawHeart(x, y, size, opacity) {
+  ctx.save();
+  ctx.globalAlpha = opacity;
+  ctx.fillStyle = '#ff6090';
+  ctx.beginPath();
+  ctx.moveTo(x, y + size * 0.25);
+  ctx.bezierCurveTo(x, y, x - size, y, x - size, y + size * 0.35);
+  ctx.bezierCurveTo(x - size, y + size * 0.7, x, y + size * 0.85, x, y + size);
+  ctx.bezierCurveTo(x, y + size * 0.85, x + size, y + size * 0.7, x + size, y + size * 0.35);
+  ctx.bezierCurveTo(x + size, y, x, y, x, y + size * 0.25);
+  ctx.fill();
+  ctx.restore();
+}
+
+function animate() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  for (const h of hearts) {
+    h.y -= h.speed;
+    h.x += h.drift;
+    if (h.y < -40) {
+      h.y = canvas.height + 20;
+      h.x = Math.random() * canvas.width;
+    }
+    drawHeart(h.x, h.y, h.size, h.opacity);
+  }
+  requestAnimationFrame(animate);
+}
+animate();
+
+let shown = false;
+function showMore() {
+  if (!shown) {
+    document.getElementById('extras').classList.add('visible');
+    document.getElementById('btnMore').textContent = '💗 Te amo, mi niña';
+    document.getElementById('btnMore').style.background = 'linear-gradient(135deg, #9b1d4a, #c4335f)';
+    shown = true;
+  }
+}
+</script>
+</body>
+</html>
